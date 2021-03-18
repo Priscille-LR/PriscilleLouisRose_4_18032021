@@ -8,7 +8,8 @@ function editNav() {
 }
 
 // DOM Elements
-const modalbg = document.querySelector(".bground");
+const modalbg = document.querySelector(".background");
+const modalBody = document.getElementsByClassName("modal-body");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
 
@@ -44,3 +45,9 @@ function showError() {
   }
   firstname_missing.style.color = 'red';
 }
+
+const modalCloseButton = document.querySelector(".close");
+//close modal form
+modalCloseButton.addEventListener("click", function() {
+  modalbg.style.display = "none";
+});

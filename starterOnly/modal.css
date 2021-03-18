@@ -157,7 +157,7 @@ main {
   font-size: 16px;
 }
 
-.bground {
+.background {
   display: none;
   position: fixed;
   z-index: 1;
@@ -526,4 +526,14 @@ footer {
     opacity: 1;
   }
 }
+
+/* @keyframes modal_close {
+  from {
+    opacity: 1;
+    transform: translateY(150px);
+  }
+  to {
+    opacity: 0;
+  }
+} */
 
