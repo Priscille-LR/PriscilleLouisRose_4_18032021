@@ -21,20 +21,70 @@ function launchModal() {
   modalbg.style.display = "block";
 }
 
-//validate value input
+//close modal 
 
-const validation = document.getElementById('btn-submit');
+const modalCloseButton = document.querySelector(".close");
+
+modalCloseButton.addEventListener("click", function() {
+  modalbg.style.display = "none";
+});
+
+
+//validate firstname input
+
+
 const firstname = document.getElementById('first');
 const firstname_missing = document.getElementById('firstname_missing');
-const firstname_validation = /^[a-zA-Z '-]{2,}$/;
+const firstname_format = /^[a-zA-Z '-]{2,}$/;
 
-validation.addEventListener('click', validate);
+// submit.addEventListener('click', validate);
 
-function validate(e) {
-if (firstname_validation.test(firstname.value) == false) { //incorrect input -> prevent form sending
-    e.preventDefault();
+// function validate(e) {
+//   hideError();
+//   if (firstname_format.test(firstname.value) == false) { //incorrect input -> prevent form sending
+//     e.preventDefault();
+//     showError();
+//   } 
+//   sendData()
+// }
+
+
+
+// function showError() {
+//   if (firstname.value == 0) {
+//     firstname_missing.innerHTML = 'Prénom manquant';
+//   } else {
+//     firstname_missing.innerHTML = 'Format incorrect';
+//   }
+//   firstname_missing.style.color = 'red';
+//   firstname_missing.style.fontSize = 'small';
+// }
+
+
+
+
+
+firstname.addEventListener('focus', function(){
+  hideError();
+})
+
+function hideError(){
+  firstname_missing.innerHTML = ""
+}
+
+firstname.addEventListener('blur', function() {
+  const isValid = validateFirstname();
+  if(isValid == false){
     showError();
-  } 
+  }
+});
+
+function validateFirstname() {
+  if ((firstname.value != 0) && (firstname_format.test(firstname.value))) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function showError() {
@@ -44,10 +94,17 @@ function showError() {
     firstname_missing.innerHTML = 'Format incorrect';
   }
   firstname_missing.style.color = 'red';
+  firstname_missing.style.fontSize = 'small';
 }
 
-const modalCloseButton = document.querySelector(".close");
-//close modal form
-modalCloseButton.addEventListener("click", function() {
-  modalbg.style.display = "none";
-});
+const submitButton = document.getElementById('btn-submit');
+submitButton.addEventListener('click', submitForm);
+
+function submitForm() {
+  if (validateFirstname() == true) { 
+    hideError();
+    sendData();
+  } else {
+    e.preventDefault();
+  }
+}
