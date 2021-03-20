@@ -21,90 +21,176 @@ function launchModal() {
   modalbg.style.display = "block";
 }
 
-//close modal 
+//close modal event
 
 const modalCloseButton = document.querySelector(".close");
+modalCloseButton.addEventListener("click", closeModal);
 
-modalCloseButton.addEventListener("click", function() {
+// close modal form
+
+function closeModal() {
   modalbg.style.display = "none";
-});
+}
 
 
-//validate firstname input
+// Issue 2
 
 
 const firstname = document.getElementById('first');
-const firstname_missing = document.getElementById('firstname_missing');
-const firstname_format = /^[a-zA-Z '-]{2,}$/;
+const lastname = document.getElementById('last');
+const email = document.getElementById('email');
+const birthdate = document.getElementById('birthdate');
 
-// submit.addEventListener('click', validate);
+const nameFormat = /^[a-zA-Z '-]{2,}$/;
+const emailAdressFormat = /\S+@\S+\.\S+/;
 
-// function validate(e) {
-//   hideError();
-//   if (firstname_format.test(firstname.value) == false) { //incorrect input -> prevent form sending
-//     e.preventDefault();
-//     showError();
-//   } 
-//   sendData()
-// }
+const errorMessages = document.querySelectorAll('#error_message');
 
-
-
-// function showError() {
-//   if (firstname.value == 0) {
-//     firstname_missing.innerHTML = 'Prénom manquant';
-//   } else {
-//     firstname_missing.innerHTML = 'Format incorrect';
-//   }
-//   firstname_missing.style.color = 'red';
-//   firstname_missing.style.fontSize = 'small';
-// }
-
-
-
-
-
-firstname.addEventListener('focus', function(){
-  hideError();
-})
-
-function hideError(){
-  firstname_missing.innerHTML = ""
+const fields = {
+  firstname: false,
+  lastname: false,
+  email: false,
+  birthdate: false,
+  quantity: false,
+  checkbox1: false
 }
 
-firstname.addEventListener('blur', function() {
-  const isValid = validateFirstname();
-  if(isValid == false){
-    showError();
+
+// firstname validation
+
+firstname.addEventListener('focus', function () {
+  hideError(errorMessages[0]);
+})
+
+function hideError(errorMessage) {
+  errorMessage.innerHTML = ""
+}
+
+firstname.addEventListener('blur', function () {
+  if (validateFirstname() == true) {
+    fields.firstname = true;
+  } else {
+    fields.firstname = false;
+    showErrorFirstAndLastName(errorMessages[0]);
   }
 });
 
 function validateFirstname() {
-  if ((firstname.value != 0) && (firstname_format.test(firstname.value))) {
+  if ((firstname.value.length != 0) && (nameFormat.test(firstname.value))) {
     return true;
   } else {
     return false;
   }
 }
 
-function showError() {
-  if (firstname.value == 0) {
-    firstname_missing.innerHTML = 'Prénom manquant';
-  } else {
-    firstname_missing.innerHTML = 'Format incorrect';
+function showErrorFirstAndLastName(errorMessage) {
+  const completeField = 'Veuillez compléter ce champ';
+  const completeTwoCharMin = 'Veuillez entrer au moins 2 caractères';
+  if (errorMessage == errorMessages[0]) { //firstaName
+    if (firstname.value.length == 0) {
+      errorMessage.innerHTML = completeField;
+    } else {
+      errorMessage.innerHTML = completeTwoCharMin;
+    }
+  } else if (errorMessage == errorMessages[1]) { // LastName
+    if (lastname.value.length == 0) {
+      errorMessage.innerHTML = completeField;
+    } else {
+      errorMessage.innerHTML = completeTwoCharMin;
+    }
   }
-  firstname_missing.style.color = 'red';
-  firstname_missing.style.fontSize = 'small';
+
+  errorMessage.style.color = 'red';
+  errorMessage.style.fontSize = 'small';
+
+
 }
+
+
+function showErrorEmail(errorMessage) {
+  if (email.value.length == 0) {
+    errorMessage.innerHTML = 'Veuillez compléter ce champ';
+  } else {
+    errorMessage.innerHTML = 'Veuillez entrer une adresse mail valide';
+  }
+  errorMessage.style.color = 'red';
+  errorMessage.style.fontSize = 'small';
+}
+
+
+// lastname validation
+
+lastname.addEventListener('focus', function () {
+  hideError(errorMessages[1]);
+})
+
+
+lastname.addEventListener('blur', function () {
+  if (validateLastname() == true) {
+    fields.lastname = true;
+  } else {
+    fields.lastname = false;
+    showErrorFirstAndLastName(errorMessages[1]);
+  }
+});
+
+
+
+function validateLastname() {
+  if ((lastname.value.length != 0) && (nameFormat.test(lastname.value))) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// email validation
+email.addEventListener('focus', function () {
+  hideError(errorMessages[2]);
+})
+
+email.addEventListener('blur', function () {
+  if (validateEmail() == true) {
+    fields.email = true;
+  } else {
+    fields.email = false;
+    showErrorEmail(errorMessages[2]);
+  }
+});
+
+function validateEmail() {
+  if ((email.value.length != 0) && (emailAdressFormat.test(email.value))) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+// final validation
+function validate() {
+  if (fields.firstname == true &&
+    fields.lastname == true &&
+    fields.email == true &&
+    fields.birthdate == true &&
+    fields.quantity == true &&
+    fields.checkbox1 == true) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// submit form 
 
 const submitButton = document.getElementById('btn-submit');
 submitButton.addEventListener('click', submitForm);
 
-function submitForm() {
-  if (validateFirstname() == true) { 
+function submitForm(e) {
+  console.log(fields)
+  e.preventDefault();
+  if (validate() == true) {
     hideError();
-    sendData();
-  } else {
-    e.preventDefault();
+    sendData();//to do
   }
 }
