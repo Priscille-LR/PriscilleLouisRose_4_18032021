@@ -208,6 +208,15 @@ input {
   font-size: 20px;
   height: 48px;
 }
+
+#error_message {
+  display: block;
+  color: red;
+  font-size: small;
+  margin: 7px 0px;
+
+}
+
 .formData[data-error]::after {
   content: attr(data-error);
   font-size: 0.4em;
@@ -277,6 +286,17 @@ input[data-error]::after {
   opacity: 1;
 }
 .checkbox-input:checked + .checkbox2-label .checkbox-icon {
+  background: #279e7a;
+}
+
+.city-checkbox-input {
+  display: none;
+}
+.city-checkbox-input:checked + .checkbox-label .checkbox-icon::after,
+.city-checkbox-input:checked + .checkbox2-label .checkbox-icon::after {
+  opacity: 1;
+}
+.city-checkbox-input:checked + .checkbox2-label .checkbox-icon {
   background: #279e7a;
 }
 .checkbox2-label .checkbox-icon {
