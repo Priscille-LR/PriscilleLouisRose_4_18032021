@@ -9,7 +9,6 @@ function editNav() {
 
 // DOM Elements
 const modalbg = document.querySelector(".background");
-const modalBody = document.getElementsByClassName("modal-body");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
 const modalCloseButton = document.querySelector(".close");
@@ -36,8 +35,8 @@ function closeModal() {
 // Issue 2-3
 
 // DOM Elements
-const firstname = document.getElementById('first');
-const lastname = document.getElementById('last');
+const firstname = document.getElementById('firstname');
+const lastname = document.getElementById('lastname');
 const email = document.getElementById('email');
 const birthdate = document.getElementById('birthdate');
 const checkboxGCU = document.getElementById('checkbox1');
@@ -55,6 +54,7 @@ const errorMessages = document.querySelectorAll('#error_message');
 
 const fields = {
   firstname: false,
+  firstnameValue: "",
   lastname: false,
   email: false,
   birthdate: false,
@@ -81,7 +81,7 @@ firstname.addEventListener('focus', function () {
 // firstname field event: event occurs when an element loses focus; 
 //error messages are displayed when field is invalid	
 firstname.addEventListener('blur', function () {
-  if (validateFirstname() == true) {
+  if (validateName(firstname.value) == true) {
     fields.firstname = true;
   } else {
     fields.firstname = false;
@@ -89,14 +89,24 @@ firstname.addEventListener('blur', function () {
   }
 });
 
+lastname.addEventListener('blur', function () {
+  if (validateName(lastname.value) == true) {
+    fields.lastname = true;
+  } else {
+    fields.lastname = false;
+    showErrorFirstAndLastName(errorMessages[1]);
+  }
+});
+
 //firstname validation: make sure field is not empty and has the right format (min. 2 characters)
-function validateFirstname() {
-  if ((firstname.value.length != 0) && (nameFormat.test(firstname.value))) {
+function validateName(text) {
+  if ((text.length != 0) && (nameFormat.test(text))) {
     return true;
   } else {
     return false;
   }
 }
+
 
 // error messages displayed in case of invalid first and lastname
 function showErrorFirstAndLastName(errorMessage) {
@@ -127,23 +137,10 @@ lastname.addEventListener('focus', function () {
 
 // lastname field event : event occurs when an element loses focus; 
 //error messages are displayed when field is invalid
-lastname.addEventListener('blur', function () {
-  if (validateLastname() == true) {
-    fields.lastname = true;
-  } else {
-    fields.lastname = false;
-    showErrorFirstAndLastName(errorMessages[1]);
-  }
-});
 
-//lastname validation
-function validateLastname() {
-  if ((lastname.value.length != 0) && (nameFormat.test(lastname.value))) {
-    return true;
-  } else {
-    return false;
-  }
-}
+
+
+
 
 
 // EMAIL 
@@ -156,7 +153,7 @@ email.addEventListener('focus', function () {
 // email field event 
 //error messages are displayed when field is invalid	
 email.addEventListener('blur', function () {
-  if (validateEmail() == true) {
+  if (validateEmail(email.value) == true) {
     fields.email = true;
   } else {
     fields.email = false;
@@ -165,8 +162,8 @@ email.addEventListener('blur', function () {
 });
 
 //email validation: make sure field is not empty and has the right format (= valid email address)
-function validateEmail() {
-  if ((email.value.length != 0) && (emailAddressFormat.test(email.value))) {
+function validateEmail(text) {
+  if ((text.length != 0) && (emailAddressFormat.test(text))) {
     return true;
   } else {
     return false;
@@ -193,7 +190,7 @@ birthdate.addEventListener('focus', function () {
 // birthdate field event 
 //error messages are displayed when field is invalid	
 birthdate.addEventListener('blur', function () {
-  if (validateBirthdate() == true) {
+  if (validateBirthdate(birthdate.value) == true) {
     fields.birthdate = true;
   } else {
     fields.birthdate = false;
@@ -202,8 +199,8 @@ birthdate.addEventListener('blur', function () {
 });
 
 //birthdate validation: make sure field is not empty and has the right format (= JJ/MM/YYYY)
-function validateBirthdate() {
-  if ((birthdate.value.length != 0) && (dateFormat.test(birthdate.value))) {
+function validateBirthdate(text) {
+  if ((text.length != 0) && (dateFormat.test(text))) {
     return true;
   } else {
     return false;
@@ -220,15 +217,14 @@ function showErrorBirthdate(errorMessage) {
 }
 
 
-
-
+//NUMBER OF PARTICIPATIONS & LOCATION
 
 // number of participations => quantity 
 
 numberOfParticipations.addEventListener('input', function () {
-  console.log("value of input " + numberOfParticipations.value);
   hideError(errorMessages[4]);
-  if (validateParticipations() == true) {
+  hideError(errorMessages[5]);
+  if (validateParticipations(numberOfParticipations.value) == true) {
     fields.numberOfParticipations = true;
   } else {
     fields.numberOfParticipations = false;
@@ -238,8 +234,8 @@ numberOfParticipations.addEventListener('input', function () {
 
 
 // participations validation: make sure field has the right format (integer, not decimal) 
-function validateParticipations() {
-  if (participationsFormat.test(numberOfParticipations.value)) {
+function validateParticipations(text) {
+  if (participationsFormat.test(text)) {
     return true;
   } else {
     return false;
@@ -267,24 +263,24 @@ checkboxesCity.forEach((cityCheckbox) => {
 function atLeastOneCityChecked() {
   if ((numberOfParticipations.value == 0) && (fields.numberOfCitiesChecked == 0)) {
     return true;
-  }
-  if ((numberOfParticipations.value >= 1) && (fields.numberOfCitiesChecked == 1)) {
-    console.log("at least one city checked");
+  } else if (fields.numberOfCitiesChecked <= numberOfParticipations.value && fields.numberOfCitiesChecked >= 1) {
     return true;
-  } else if ((numberOfParticipations.value >= 1) && (fields.numberOfCitiesChecked >= 1)) {
+  } else if ((fields.numberOfCitiesChecked > numberOfParticipations.value) ||
+    ((fields.numberOfCitiesChecked == 0) && (numberOfParticipations.value != 0))) {
     return false;
   }
   return false;
 }
 
+// if number of cities selected > participation => error messages
 function showErrorCityCheckbox(errorMessage) {
-  if ((numberOfParticipations.value >= 1) && (fields.numberOfCitiesChecked >= 1)) {
-    errorMessage.innerHTML = "Vous ne pouvez sélectionner qu'une seule ville";
-  }
-  else if (atLeastOneCityChecked() == false) {
-    errorMessage.innerHTML = "Veuiller sélectionner une ville";
+  if (fields.numberOfCitiesChecked > numberOfParticipations.value) {
+    errorMessage.innerHTML = "Vous ne pouvez pas sélectionner un nombre de villes supérieur à celui de vos participations";
+  } else if (fields.numberOfCitiesChecked == 0 && numberOfParticipations.value != 0) {
+    errorMessage.innerHTML = "Veuillez sélectionner une ville";
   }
 }
+
 
 
 
@@ -320,6 +316,14 @@ function showErrorCheckboxGCU(errorMessage) {
 }
 
 
+
+
+
+// Issue 4
+
+
+// submit form 
+
 // final validation
 function validateData() {
   if (fields.firstname == true &&
@@ -335,26 +339,54 @@ function validateData() {
   }
 }
 
-
-// Issue 4
-
-
-// submit form 
-
 const submitButton = document.getElementById('btn-submit');
+const form = document.forms[0];
+const bgModalSuccess = document.querySelector('.background-modal-success');
+const bodyModalSuccess = document.querySelector('.modal-body-modal-success');
+
+//form.addEventListener('submit', launchModalRegistrationSuccess);
+
 
 submitButton.addEventListener('click', function (e) {
-  if (validateData() == true) {
-    console.log("inscrription enregistrée");
-  } else {
-    e.preventDefault();
-    showErrors()
-  }
-});
-
-function showErrors() {
   if (fields.numberOfParticipations == true && atLeastOneCityChecked() == false) {
+    e.preventDefault();
     hideError(errorMessages[5]);
     showErrorCityCheckbox(errorMessages[5]);
   }
-}
+});
+
+
+  // launch modal registration success
+  function launchModalRegistrationSuccess() {
+    bgModalSuccess.style.display = "block";
+  }
+
+  //close modal registration success event
+  bgModalSuccess.addEventListener('click', closeModalRegistrationSuccess);
+
+  // close modal registration success 
+  function closeModalRegistrationSuccess() {
+    bgModalSuccess.style.display = 'none';
+  }
+
+
+  // GETTING URL PARAMETERS
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+
+  const firstnameFromURL = urlParams.get('firstname');
+  const lastnameFromURL = urlParams.get('lastname');
+  const emailFromURL = urlParams.get('email');
+  const birthdateFromURL = urlParams.get('birthdate');
+  const quantityFromURL = urlParams.get('quantity');
+  const locationFromURL = urlParams.get('location');
+
+
+// make sure data in URL is valid before launching success modal
+  if (firstnameFromURL != null && validateName(firstnameFromURL) == true &&
+    lastnameFromURL != null && validateName(lastnameFromURL) == true &&
+    emailFromURL != null && validateEmail(emailFromURL) == true &&
+    birthdateFromURL != null && validateBirthdate(birthdateFromURL) == true &&
+    quantityFromURL != null && validateParticipations(quantityFromURL) == true) {
+    launchModalRegistrationSuccess();
+  }

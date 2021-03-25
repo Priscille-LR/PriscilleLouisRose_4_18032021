@@ -47,43 +47,43 @@
         <div class="hero-img">
           <img src="./bg_img.jpg" alt="img" />
         </div>
-        <!-- <button class="btn-signup modal-btn">
+        <button class="btn-signup modal-btn">
           je m'inscris
-        </button> -->
+        </button>
       </div>
 
       <div class="background">
         <div class="content">
           <span class="close"></span>
           <div class="modal-body">
-            <form
+            <form id="form"
               name="reserve"
               action="index.html"
               method="get"
-              onsubmit="return validate();"
+              onsubmit="return validateData();"
             >
               <div
                 class="formData">
-                <label for="first">Prénom</label><br>
+                <label for="firstname">Prénom</label><br>
                 <input
                   class="text-control"
                   type="text"
                   required
-                  id="first"
-                  name="first"
+                  id="firstname"
+                  name="firstname"
                   minlength="2"
                 /><br>
                 <span id="error_message"></span>
               </div>
               <div
                 class="formData">
-                <label for="last">Nom</label><br>
+                <label for="lastname">Nom</label><br>
                 <input
                   class="text-control"
                   type="text"
                   required
-                  id="last"
-                  name="last"
+                  id="lastname"
+                  name="lastname"
                   minlength="2"
                 /><br>
                 <span id="error_message"></span>
@@ -221,7 +221,22 @@
           </div>
         </div>
       </div>
+
+      <div class="background-modal-success">
+        <div class="content-modal-success">
+          <span class="close"></span>
+          <div class="modal-body-modal-success">
+            <p class="hero-text-modal-success">Merci ! <br>
+              Votre inscription a bien été enregistrée</p>
+            <button class="modal-success-close">
+              Fermer
+            </button>
+          </div>
+        </div>
+      </div>
+ 
     </main>
+
     <footer>
       <p class="copyrights">
         Copyright 2014 - 2020, GameOn Inc.
