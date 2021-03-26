@@ -45,16 +45,14 @@ const checkboxesCity = document.querySelectorAll(".city-checkbox-input")
 
 
 // fields format
-const nameFormat = /^[a-zA-Z '-]{2,}$/;
+const nameFormat = /^[\w\-\sàáâãäåçèéêëìíîïðòóôõöùúûüýÿ']{2,}$/;
 const emailAddressFormat = /\S+@\S+\.\S+/;
 const dateFormat = /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/;
 const participationsFormat = /^[0-9]*$/;
-
 const errorMessages = document.querySelectorAll('#error_message');
 
 const fields = {
   firstname: false,
-  firstnameValue: "",
   lastname: false,
   email: false,
   birthdate: false,
@@ -71,12 +69,23 @@ function hideError(errorMessage) {
 }
 
 
-// FIRSTNAME 
+// FIRSTNAME & LASTNAME
 
 //hide error message when focus
 firstname.addEventListener('focus', function () {
   hideError(errorMessages[0]);
 })
+
+lastname.addEventListener('focus', function () {
+  hideError(errorMessages[1]);
+})
+
+// [firstname, lastname].forEach(field => {
+//   field.addEventListener('focus', function () {
+//     hideError(errorMessages[0]);
+//     hideError(errorMessages[1]);
+//   });
+// })
 
 // firstname field event: event occurs when an element loses focus; 
 //error messages are displayed when field is invalid	
@@ -126,21 +135,6 @@ function showErrorFirstAndLastName(errorMessage) {
     }
   }
 }
-
-
-// LASTNAME 
-
-//hide error message when focus
-lastname.addEventListener('focus', function () {
-  hideError(errorMessages[1]);
-})
-
-// lastname field event : event occurs when an element loses focus; 
-//error messages are displayed when field is invalid
-
-
-
-
 
 
 // EMAIL 
@@ -282,9 +276,6 @@ function showErrorCityCheckbox(errorMessage) {
 }
 
 
-
-
-
 // GCU CHECKBOX
 
 // checkbox GCU field event : event occurs when the checked state has changed;
@@ -314,8 +305,6 @@ function showErrorCheckboxGCU(errorMessage) {
     errorMessage.innerHTML = "Veuillez accepter les conditions d'utilisation";
   }
 }
-
-
 
 
 
