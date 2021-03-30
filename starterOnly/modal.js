@@ -39,17 +39,18 @@ const firstname = document.getElementById('firstname');
 const lastname = document.getElementById('lastname');
 const email = document.getElementById('email');
 const birthdate = document.getElementById('birthdate');
-const checkboxGCU = document.getElementById('checkbox1');
 const numberOfParticipations = document.getElementById('quantity');
-const checkboxesCity = document.querySelectorAll(".city-checkbox-input")
-
+const checkboxesCity = document.querySelectorAll(".city-checkbox-input");
+const formDataCities = document.querySelector('.formData--cities');
+const checkboxGCU = document.getElementById('checkbox1');
+const formDataGCU  = document.querySelector('.formData--GCU');
 
 // fields format
 const nameFormat = /^[\w\-\sàáâãäåçèéêëìíîïðòóôõöùúûüýÿ']{2,}$/;
 const emailAddressFormat = /\S+@\S+\.\S+/;
 const dateFormat = /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/;
 const participationsFormat = /^[0-9]*$/;
-const errorMessages = document.querySelectorAll('#error_message');
+
 
 const fields = {
   firstname: false,
@@ -63,51 +64,44 @@ const fields = {
 }
 
 
+//error message is displayed when field is invalid	
+function showErrorMessage(field, message) {
+  field.setAttribute('data-error', message);
+  field.setAttribute('data-error-visible','true')
+}
 
-function hideError(errorMessage) {
-  errorMessage.innerHTML = ""
+//error message is hidden 
+function hideErrorMessage(field) {
+  field.removeAttribute('data-error');
+  field.removeAttribute('data-error-visible')
 }
 
 
 // FIRSTNAME & LASTNAME
 
-//hide error message when focus
-firstname.addEventListener('focus', function () {
-  hideError(errorMessages[0]);
-})
-
-lastname.addEventListener('focus', function () {
-  hideError(errorMessages[1]);
-})
-
-// [firstname, lastname].forEach(field => {
-//   field.addEventListener('focus', function () {
-//     hideError(errorMessages[0]);
-//     hideError(errorMessages[1]);
-//   });
-// })
-
-// firstname field event: event occurs when an element loses focus; 
-//error messages are displayed when field is invalid	
+// firstname/lastname field events: event occurs when an element loses focus; 
+//error messages are displayed when fields are invalid (otherwise they are hidden)
 firstname.addEventListener('blur', function () {
-  if (validateName(firstname.value) == true) {
+  if (validateName(firstname.value) === true) {
     fields.firstname = true;
+    hideErrorMessage(firstname.parentElement)
   } else {
     fields.firstname = false;
-    showErrorFirstAndLastName(errorMessages[0]);
+    showErrorMessage(firstname.parentElement, 'Veuillez entrer au moins 2 caractères')
   }
 });
 
 lastname.addEventListener('blur', function () {
-  if (validateName(lastname.value) == true) {
+  if (validateName(lastname.value) === true) {
     fields.lastname = true;
+    hideErrorMessage(lastname.parentElement)
   } else {
     fields.lastname = false;
-    showErrorFirstAndLastName(errorMessages[1]);
+    showErrorMessage(lastname.parentElement, 'Veuillez entrer au moins 2 caractères')
   }
 });
 
-//firstname validation: make sure field is not empty and has the right format (min. 2 characters)
+//name validation: make sure field is not empty and has the right format (min. 2 characters)
 function validateName(text) {
   if ((text.length != 0) && (nameFormat.test(text))) {
     return true;
@@ -117,41 +111,17 @@ function validateName(text) {
 }
 
 
-// error messages displayed in case of invalid first and lastname
-function showErrorFirstAndLastName(errorMessage) {
-  const completeField = 'Veuillez compléter ce champ';
-  const completeTwoCharMin = 'Veuillez entrer au moins 2 caractères';
-  if (errorMessage == errorMessages[0]) { //firstname
-    if (firstname.value.length == 0) {
-      errorMessage.innerHTML = completeField;
-    } else {
-      errorMessage.innerHTML = completeTwoCharMin;
-    }
-  } else if (errorMessage == errorMessages[1]) { // Lastname
-    if (lastname.value.length == 0) {
-      errorMessage.innerHTML = completeField;
-    } else {
-      errorMessage.innerHTML = completeTwoCharMin;
-    }
-  }
-}
-
-
 // EMAIL 
 
-//hide error message when focus
-email.addEventListener('focus', function () {
-  hideError(errorMessages[2]);
-})
-
 // email field event 
-//error messages are displayed when field is invalid	
+//error message is displayed when field is invalid	
 email.addEventListener('blur', function () {
-  if (validateEmail(email.value) == true) {
+  if (validateEmail(email.value) === true) {
     fields.email = true;
+    hideErrorMessage(email.parentElement)
   } else {
     fields.email = false;
-    showErrorEmail(errorMessages[2]);
+    showErrorMessage(email.parentElement, 'Veuillez entrer une adresse mail valide')
   }
 });
 
@@ -164,31 +134,18 @@ function validateEmail(text) {
   }
 }
 
-// error messages displayed in case of invalid email address
-function showErrorEmail(errorMessage) {
-  if (email.value.length == 0) {
-    errorMessage.innerHTML = 'Veuillez compléter ce champ';
-  } else {
-    errorMessage.innerHTML = 'Veuillez entrer une adresse mail valide';
-  }
-}
-
 
 //BIRTHDATE 
 
-//hide error message when focus
-birthdate.addEventListener('focus', function () {
-  hideError(errorMessages[3]);
-})
-
 // birthdate field event 
-//error messages are displayed when field is invalid	
+//error message is displayed when field is invalid	
 birthdate.addEventListener('blur', function () {
-  if (validateBirthdate(birthdate.value) == true) {
+  if (validateBirthdate(birthdate.value) === true) {
     fields.birthdate = true;
+    hideErrorMessage(birthdate.parentElement)
   } else {
     fields.birthdate = false;
-    showErrorBirthdate(errorMessages[3]);
+    showErrorMessage(birthdate.parentElement, 'Veuillez entrer votre date de naissance')
   }
 });
 
@@ -201,28 +158,18 @@ function validateBirthdate(text) {
   }
 }
 
-// error messages displayed in case of invalid birthdate
-function showErrorBirthdate(errorMessage) {
-  if (birthdate.value == 0) {
-    errorMessage.innerHTML = 'Veuillez entrer votre date de naissance';
-  } else {
-    errorMessage.innerHTML = 'Veuillez entrer une date valide';
-  }
-}
-
 
 //NUMBER OF PARTICIPATIONS & LOCATION
 
 // number of participations => quantity 
 
 numberOfParticipations.addEventListener('input', function () {
-  hideError(errorMessages[4]);
-  hideError(errorMessages[5]);
-  if (validateParticipations(numberOfParticipations.value) == true) {
+  if (validateParticipations(numberOfParticipations.value) === true) {
     fields.numberOfParticipations = true;
+    hideErrorMessage(numberOfParticipations.parentElement)
   } else {
     fields.numberOfParticipations = false;
-    showErrorNumberOfParticipations(errorMessages[4]);
+    showErrorMessage(numberOfParticipations.parentElement, 'Veuillez entrer un nombre')
   }
 });
 
@@ -236,15 +183,9 @@ function validateParticipations(text) {
   }
 }
 
-function showErrorNumberOfParticipations(errorMessage) {
-  if (validateParticipations() == false) {
-    errorMessage.innerHTML = "Veuillez entrer un nombre";
-  }
-}
 
 checkboxesCity.forEach((cityCheckbox) => {
   cityCheckbox.addEventListener("change", function () {
-    hideError(errorMessages[5]);
     if (this.checked) {
       fields.numberOfCitiesChecked += 1;
     } else {
@@ -255,38 +196,46 @@ checkboxesCity.forEach((cityCheckbox) => {
 
 // make sure at least one city is checked if number of participations >= 1
 function atLeastOneCityChecked() {
-  if ((numberOfParticipations.value == 0) && (fields.numberOfCitiesChecked == 0)) {
+  if 
+  ((numberOfParticipations.value == 0 && fields.numberOfCitiesChecked == 0) 
+  || (fields.numberOfCitiesChecked <= numberOfParticipations.value && fields.numberOfCitiesChecked >= 1)) {
     return true;
-  } else if (fields.numberOfCitiesChecked <= numberOfParticipations.value && fields.numberOfCitiesChecked >= 1) {
-    return true;
-  } else if ((fields.numberOfCitiesChecked > numberOfParticipations.value) ||
-    ((fields.numberOfCitiesChecked == 0) && (numberOfParticipations.value != 0))) {
+  } else if 
+  ((fields.numberOfCitiesChecked > numberOfParticipations.value) 
+  || (fields.numberOfCitiesChecked == 0) && (numberOfParticipations.value != 0)) {
     return false;
   }
   return false;
 }
 
 // if number of cities selected > participation => error messages
-function showErrorCityCheckbox(errorMessage) {
+function showErrorCityCheckbox(formData) {
   if (fields.numberOfCitiesChecked > numberOfParticipations.value) {
-    errorMessage.innerHTML = "Vous ne pouvez pas sélectionner un nombre de villes supérieur à celui de vos participations";
+    showErrorMessage(formData, "Vous ne pouvez pas sélectionner un nombre de villes supérieur à celui de vos participations");
   } else if (fields.numberOfCitiesChecked == 0 && numberOfParticipations.value != 0) {
-    errorMessage.innerHTML = "Veuillez sélectionner une ville";
+    showErrorMessage(formData, "Veuillez sélectionner une ville");
   }
 }
 
+function hideErrorCityCheckbox(formData) {
+  if
+    ((numberOfParticipations.value == 0 && fields.numberOfCitiesChecked == 0)
+    || (fields.numberOfCitiesChecked <= numberOfParticipations.value && fields.numberOfCitiesChecked >= 1)) {
+    hideErrorMessage(formData)
+  }
+}
 
 // GCU CHECKBOX
 
 // checkbox GCU field event : event occurs when the checked state has changed;
 // this checkbox is checked by default; if user unchecks it, error message is displayed
 checkboxGCU.addEventListener('change', function () {
-  hideError(errorMessages[6]);
-  if (validateCheckboxGCU() == true) {
+  hideErrorMessage(formDataGCU);
+  if (validateCheckboxGCU() === true) {
     fields.checkboxGCU = true;
   } else {
     fields.checkboxGCU = false;
-    showErrorCheckboxGCU(errorMessages[6]);
+    showErrorMessage(formDataGCU, "Veuillez accepter les conditions d'utilisation")
   }
 });
 
@@ -296,13 +245,6 @@ function validateCheckboxGCU() {
     return true;
   } else {
     return false;
-  }
-}
-
-//error message is displayed when GCU checkbox is not checked
-function showErrorCheckboxGCU(errorMessage) {
-  if (validateCheckboxGCU() == false) {
-    errorMessage.innerHTML = "Veuillez accepter les conditions d'utilisation";
   }
 }
 
@@ -337,10 +279,12 @@ const bodyModalSuccess = document.querySelector('.modal-body-modal-success');
 
 
 submitButton.addEventListener('click', function (e) {
-  if (fields.numberOfParticipations == true && atLeastOneCityChecked() == false) {
+  if (fields.numberOfParticipations === true && atLeastOneCityChecked() === false) {
     e.preventDefault();
-    hideError(errorMessages[5]);
-    showErrorCityCheckbox(errorMessages[5]);
+    showErrorCityCheckbox(formDataCities);
+  } else {
+    hideErrorCityCheckbox(formDataCities);
+    //launchModalRegistrationSuccess();
   }
 });
 

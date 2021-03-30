@@ -73,7 +73,6 @@
                   name="firstname"
                   minlength="2"
                 /><br>
-                <span id="error_message"></span>
               </div>
               <div
                 class="formData">
@@ -86,8 +85,7 @@
                   name="lastname"
                   minlength="2"
                 /><br>
-                <span id="error_message"></span>
-              </div>
+                </div>
               <div
                 class="formData">
                 <label for="email">E-mail</label><br>
@@ -98,8 +96,7 @@
                   id="email"
                   name="email"
                 /><br>
-                <span id="error_message"></span>
-              </div>
+                </div>
               <div
                 class="formData">
                 <label for="birthdate">Date de naissance</label><br>
@@ -110,17 +107,16 @@
                   id="birthdate"
                   name="birthdate"
                 /><br>
-                <span id="error_message"></span>
-              </div>
+                </div>
               <div
                 class="formData">
                 <label for="quantity">À combien de tournois GameOn avez-vous déjà participé ?</label><br>
                 <input type="number"  class="text-control" id="quantity" name="quantity" min="0" max="99">
-                <span id="error_message"></span>
               </div>
               <p class="text-label">Dans quelle(s) ville(s) ?</p>
               <div
-                class="formData">
+                class="formData formData--cities"
+                >
                 <input
                   class="city-checkbox-input"
                   type="checkbox"
@@ -188,10 +184,11 @@
                   Portland</label
                 >
               </div>
-              <span id="error_message"></span>
+            
 
               <div
                 class="formData">
+                <div class="formData--GCU">
                 <input
                   class="checkbox-input"
                   type="checkbox"
@@ -202,13 +199,15 @@
                   <span class="checkbox-icon"></span>
                   J'ai lu et accepté les conditions d'utilisation.
                 </label>
-                <br>
-                <span id="error_message"></span>
+              </div>
+                
+                <div class="formData--newsletterSignup">
                 <input class="checkbox-input" type="checkbox" id="checkbox2" />
                 <label class="checkbox2-label" for="checkbox2">
                   <span class="checkbox-icon"></span>
                   Je souhaite être prévenu des prochains évènements.
                 </label>
+              </div>
                 <br>
               </div>
               <input

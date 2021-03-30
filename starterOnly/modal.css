@@ -241,33 +241,29 @@ input {
   height: 48px;
 }
 
-#error_message {
-  display: block;
-  color: red;
-  font-size: small;
-  margin: 7px 0px;
-}
 
-.formData[data-error]::after {
+.formData[data-error]::after,
+.formData--GCU[data-error]::after {
   content: attr(data-error);
-  font-size: 0.4em;
+  font-size: 0.6rem;
   color: #e54858;
   display: block;
-  margin-top: 7px;
-  margin-bottom: 7px;
-  text-align: right;
+  margin: 10px 0px;
+  text-align: left;
   line-height: 0.3;
   opacity: 0;
   transition: 0.3s;
 }
-.formData[data-error-visible="true"]::after {
+.formData[data-error-visible="true"]::after,
+.formData--GCU[data-error-visible="true"]::after {
   opacity: 1;
 }
-.formData[data-error-visible="true"] .text-control {
+.formData[data-error-visible="true"] .text-control,
+.formData--GCU[data-error-visible="true"].text-control {
   border: 2px solid #e54858;
 }
-/* 
-input[data-error]::after {
+
+/* input[data-error]::after {
     content: attr(data-error);
     font-size: 0.4em;
     color: red;
