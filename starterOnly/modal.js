@@ -1,9 +1,20 @@
-function editNav() {
-  var x = document.getElementById("myTopnav");
-  if (x.className === "topnav") {
-    x.className += " responsive";
+const navbar = document.querySelector(".main-navbar");
+const icon = document.querySelector(".icon");
+
+function openNav() {
+  if (navbar.style.display === "flex") {
+    navbar.style.display = "none";
   } else {
-    x.className = "topnav";
+    navbar.style.display = "flex";
+  }
+}
+
+
+
+window.addEventListener('resize', reportWindowSize);
+function reportWindowSize() {
+  if(window.innerWidth > 768){
+    navbar.style.display = "flex";
   }
 }
 
@@ -44,6 +55,7 @@ const checkboxesCity = document.querySelectorAll(".city-checkbox-input");
 const formDataCities = document.querySelector('.formData--cities');
 const checkboxGCU = document.getElementById('checkbox1');
 const formDataGCU  = document.querySelector('.formData--GCU');
+const errorMessageCheckboxes = document.querySelector('.errorMessage--checkboxes');
 
 // fields format
 const nameFormat = /^[\w\-\sàáâãäåçèéêëìíîïðòóôõöùúûüýÿ']{2,}$/;
@@ -137,26 +149,34 @@ function validateEmail(text) {
 
 //BIRTHDATE 
 
+
 // birthdate field event 
-//error message is displayed when field is invalid	
+//error message is displayed when field is invalid
+
 birthdate.addEventListener('blur', function () {
-  if (validateBirthdate(birthdate.value) === true) {
+  const parsedDate = birthdate.value.split('-');
+  const birthdateYear = parseInt(parsedDate[0]);
+  const todaysYear = new Date().getFullYear();
+  if (birthdate.value.length !=0 && 
+    birthdateYear <= todaysYear &&
+    dateFormat.test(birthdate.value)) {
+    hideErrorMessage(birthdate.parentElement);
     fields.birthdate = true;
-    hideErrorMessage(birthdate.parentElement)
   } else {
+    showErrorMessage(birthdate.parentElement, 'Veuillez entrer une date de naissance valide');
     fields.birthdate = false;
-    showErrorMessage(birthdate.parentElement, 'Veuillez entrer votre date de naissance')
   }
 });
 
+
 //birthdate validation: make sure field is not empty and has the right format (= JJ/MM/YYYY)
-function validateBirthdate(text) {
-  if ((text.length != 0) && (dateFormat.test(text))) {
-    return true;
-  } else {
-    return false;
-  }
-}
+// function validateBirthdate(text) {
+//   if ((text.length != 0) && (dateFormat.test(text))) {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// }
 
 
 //NUMBER OF PARTICIPATIONS & LOCATION
@@ -209,19 +229,19 @@ function atLeastOneCityChecked() {
 }
 
 // if number of cities selected > participation => error messages
-function showErrorCityCheckbox(formData) {
+function showErrorCityCheckbox() {
   if (fields.numberOfCitiesChecked > numberOfParticipations.value) {
-    showErrorMessage(formData, "Vous ne pouvez pas sélectionner un nombre de villes supérieur à celui de vos participations");
+    errorMessageCheckboxes.innerHTML = "Vous ne pouvez pas sélectionner un nombre de villes supérieur à celui de vos participations";
   } else if (fields.numberOfCitiesChecked == 0 && numberOfParticipations.value != 0) {
-    showErrorMessage(formData, "Veuillez sélectionner une ville");
+    errorMessageCheckboxes.innerHTML = "Veuillez sélectionner une ville";
   }
 }
 
-function hideErrorCityCheckbox(formData) {
+function hideErrorCityCheckbox() {
   if
     ((numberOfParticipations.value == 0 && fields.numberOfCitiesChecked == 0)
     || (fields.numberOfCitiesChecked <= numberOfParticipations.value && fields.numberOfCitiesChecked >= 1)) {
-    hideErrorMessage(formData)
+      errorMessageCheckboxes.innerHTML = "";
   }
 }
 
@@ -275,16 +295,17 @@ const form = document.forms[0];
 const bgModalSuccess = document.querySelector('.background-modal-success');
 const bodyModalSuccess = document.querySelector('.modal-body-modal-success');
 
-//form.addEventListener('submit', launchModalRegistrationSuccess);
-
 
 submitButton.addEventListener('click', function (e) {
+  e.preventDefault();
+  hideErrorCityCheckbox();
   if (fields.numberOfParticipations === true && atLeastOneCityChecked() === false) {
-    e.preventDefault();
-    showErrorCityCheckbox(formDataCities);
-  } else {
-    hideErrorCityCheckbox(formDataCities);
-    //launchModalRegistrationSuccess();
+    showErrorCityCheckbox();
+  } else if (validateData() === true) {
+    console.log(fields);
+    console.log(birthdate.value);
+    closeModal();
+    launchModalRegistrationSuccess();
   }
 });
 
@@ -303,23 +324,23 @@ submitButton.addEventListener('click', function (e) {
   }
 
 
-  // GETTING URL PARAMETERS
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
+//   // GETTING URL PARAMETERS
+//   const queryString = window.location.search;
+//   const urlParams = new URLSearchParams(queryString);
 
-  const firstnameFromURL = urlParams.get('firstname');
-  const lastnameFromURL = urlParams.get('lastname');
-  const emailFromURL = urlParams.get('email');
-  const birthdateFromURL = urlParams.get('birthdate');
-  const quantityFromURL = urlParams.get('quantity');
-  const locationFromURL = urlParams.get('location');
+//   const firstnameFromURL = urlParams.get('firstname');
+//   const lastnameFromURL = urlParams.get('lastname');
+//   const emailFromURL = urlParams.get('email');
+//   const birthdateFromURL = urlParams.get('birthdate');
+//   const quantityFromURL = urlParams.get('quantity');
+//   const locationFromURL = urlParams.get('location');
 
 
-// make sure data in URL is valid before launching success modal
-  if (firstnameFromURL != null && validateName(firstnameFromURL) == true &&
-    lastnameFromURL != null && validateName(lastnameFromURL) == true &&
-    emailFromURL != null && validateEmail(emailFromURL) == true &&
-    birthdateFromURL != null && validateBirthdate(birthdateFromURL) == true &&
-    quantityFromURL != null && validateParticipations(quantityFromURL) == true) {
-    launchModalRegistrationSuccess();
-  }
+// // make sure data in URL is valid before launching success modal
+//   if (firstnameFromURL != null && validateName(firstnameFromURL) == true &&
+//     lastnameFromURL != null && validateName(lastnameFromURL) == true &&
+//     emailFromURL != null && validateEmail(emailFromURL) == true &&
+//     birthdateFromURL != null && validateBirthdate(birthdateFromURL) == true &&
+//     quantityFromURL != null && validateParticipations(quantityFromURL) == true) {
+//     launchModalRegistrationSuccess();
+//   }
