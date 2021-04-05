@@ -40,7 +40,6 @@ header {
 
 .header-logo {
   margin: 3rem;
-  /* flex: 1; */
 }
 
 .main-navbar {
@@ -135,8 +134,6 @@ main {
 .smFont {
   font-size: 16px;
 }
-
-
 
 .background,
 .background-modal-success {
@@ -455,7 +452,7 @@ input {
   color: #fff;
   position: relative;
   text-align: left;
-  /* min-width: 424px; */
+  min-width: 424px;
 }
 .hero-content::after {
   content: "";
@@ -525,25 +522,6 @@ footer {
   }
 }
 
-/* .close-img {
-  display: inline-block;
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  margin: 0px;
-  padding: 0px;
-  cursor: pointer;
-} */
-
-/* @keyframes modal_close {
-  from {
-    opacity: 1;
-    transform: translateY(150px);
-  }
-  to {
-    opacity: 0;
-  }
-} */
 
 @media screen and (max-width: 768px) {
   /* .topnav.responsive {
@@ -569,7 +547,6 @@ footer {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    /* position: relative; */
     margin: 10px;
     width: 100%;
   }
@@ -607,18 +584,6 @@ footer {
     flex-direction: column;
     align-items: flex-start;
   }
-
-  /* .topnav a {
-    float: left;
-    display: block;
-    color: #000000;
-    text-align: center;
-    padding: 12px 12px;
-    margin: 5px;
-    text-decoration: none;
-    font-size: 10px;
-    font-family: Roboto, sans-serif;
-  } */
 
   .topnav .icon {
     display: none;
@@ -672,7 +637,7 @@ footer {
     left: 0px;
     right: 0px;
     top: 45px;
-    bottom: 0px;
+  }
 }
 
 @media screen and (max-width: 540px) {
