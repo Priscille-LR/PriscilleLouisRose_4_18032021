@@ -664,6 +664,15 @@ footer {
     margin-top: 50px;
     text-align: center;
   }
+
+  .content,
+  .content-modal-success {
+    display: block;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 45px;
+    bottom: 0px;
 }
 
 @media screen and (max-width: 540px) {
